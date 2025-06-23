@@ -4,8 +4,18 @@
   pkgs,
   ...
 }:
-{
 
+let
+  keydConf = ''
+[ids]
+*
+
+[main]
+capslock = hold(ctrl); tap(esc)
+ctrl     = hold(ctrl); tap(esc)
+'';
+in
+{
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.kernelPackages = pkgs.linuxPackages_6_13;
@@ -59,6 +69,7 @@
     hunspellDicts.en_US
     imv
     jq
+    keyd
     libnotify
     llm
     mako
@@ -108,12 +119,17 @@
 
   services.udev.packages = [ pkgs.dolphin-emu ];
   services.pcscd.enable = true;
+  services.avahi.enable = true;
+  services.openssh.enable = true;
+  services.keyd = {
+    enable = true,
+    settingsFile = "/etc/keyd/default.conf";
+  };
+  environment.etc."keyd/default.conf".text = keydConf;
   programs.gnupg.agent = {
     enable = true;
   };
-  services.avahi.enable = true;
   networking.firewall.enable = false;
-  services.openssh.enable = true;
 
   # This option defines the first version of NixOS you have installed on this particular machine,
   # and is used to maintain compatibility with application data (e.g. databases) created on older NixOS versions.
