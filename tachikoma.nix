@@ -117,13 +117,13 @@
     enable = true;
     keyboards = {
       defaults = {
-	ids = [ "*" ];
-	settings = {
-	  main = {
-	    capslock  = "hold(ctrl); tap(esc)";
-	    ctrl      = "hold(ctrl); tap(esc)";
-	  };
-	};
+        ids = [ "*" ];
+        settings = {
+          main = {
+            capslock = "overload(control, esc)";
+            esc = "capslock";
+          };
+        };
       };
     };
   };
