@@ -32,6 +32,103 @@
         "grimslurp" = ''grim -g "$(slurp)"'';
         "unzip" = "unzrip";
       };
+      home.file = {
+        ".gitconfig".text = ''
+          [init]
+            defaultBranch = main
+          [push]
+            default = current
+          [color]
+            ui = auto
+          [alias]
+            aa = add --all
+            ap = add --patch
+            branches = for-each-ref --sort=-committerdate --format=\"%(color:blue)%(authordate:relative)\t%(color:red)%(authorname)\t%(color:white)%(color:bold)%(refname:short)\" refs/remotes
+            ci = commit
+            co = checkout
+            pf = push --force-with-lease
+            st = status
+            br = branch
+          [core]
+              excludesfile = ~/.gitignore
+              autocrlf = input
+          [merge]
+            ff = only
+          [fetch]
+            prune = true
+          [rebase]
+            autosquash = true
+          [include]
+            path = ~/.gitconfig.local
+          [diff]
+            colorMoved = zebra
+          [user]
+              email = 55966724+ealvar3z@users.noreply.github.com
+              name = ealvar3z
+          [pull]
+              rebase = true
+        '';
+        ".gitignore".text = ''
+          *.pyc
+          *.sw[nop]
+          .DS_Store
+          .bundle
+          .byebug_history
+          .env
+          .git/
+          w3m/.w3m/w3mcache*
+          w3m/.w3m/w3msrc*
+          w3m/.w3m/w3mtmp*
+          w3m/.w3m/history
+          /bower_components/
+          /log
+          /node_modules/
+          /tmp
+          db/*.sqlite3
+          log/*.log
+          rerun.txt
+          tmp/**/*
+          /tags
+
+          .idea/
+          .ionide/
+          .projectile/
+          .vscode
+          .vscode/
+          .zed
+
+          dump.rdb
+          acme.dump
+        '';
+        ".gitattributes".text = ''
+          *.css      diff=csxir
+          *.exs      diff=elixir
+          *.exs      diff=elixir
+          *.html     diff=html
+          *.go       diff=golang
+          *.md       diff=markdown
+          *.org      diff=org
+          *.py       diff=python
+          *_spec.rb  diff=rspec
+          *.gemspec  diff=ruby
+          *.rake     diff=ruby
+          *.rb       diff=ruby
+          *.rs       diff=rusts
+          *.ex       diff=elixir
+          *.exs      diff=elixir
+          *.exs      diff=elixir
+          *.html     diff=html
+          *.go       diff=golang
+          *.md       diff=markdown
+          *.org      diff=org
+          *.py       diff=python
+          *_spec.rb  diff=rspec
+          *.gemspec  diff=ruby
+          *.rake     diff=ruby
+          *.rb       diff=ruby
+          *.rs       diff=rust
+        '';
+      };
 
       programs = {
         bash = {
