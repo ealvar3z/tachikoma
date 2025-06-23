@@ -31,6 +31,12 @@
         "dn" = "makoctl dismiss -a";
         "grimslurp" = ''grim -g "$(slurp)"'';
         "unzip" = "unzrip";
+        "c" = "clear";
+        "x" = "exit";
+        "vi" = "nvim";
+        "ga" = "git add";
+        "gc" = "git commit";
+        "gp" = "git push";
       };
       home.file = {
         ".gitconfig".text = ''
