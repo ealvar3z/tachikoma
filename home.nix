@@ -217,6 +217,24 @@
         set -g status-left '#[fg=black]#[default]'
       '';
     };
+    home.file = {
+      ".inputrc".text = ''
+        # edit ~/.inputrc
+
+        # Make autocompletion case insensitive and display suggestions after single tab.
+        # https://bugs.debian.org/990353
+        set completion-ignore-case On
+        set show-all-if-ambiguous On
+
+        # vi settings
+        set editing-mode vi
+        $if mode=vi
+            # insert mode
+            set keymap vi-insert
+            "jk": vi-movement-mode # remap escape
+        $endif
+      '';
+    };
 
       programs = {
         bash = {
