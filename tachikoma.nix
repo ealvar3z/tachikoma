@@ -4,20 +4,14 @@
   pkgs,
   ...
 }:
-
-let
-  keydConf = ''
-[ids]
-*
-
-[main]
-capslock = hold(ctrl); tap(esc)
-ctrl     = hold(ctrl); tap(esc)
-'';
-in
 {
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader.systemd-boot.enable = false;
+  boot.loader.efi.canTouchEfiVariables = false;
+
+  boot.loader.grub.enable = true;
+  boot.loader.grub.device = "/dev/sda";
+  boot.loader.grub.useOSProber = true;
+
   boot.kernelPackages = pkgs.linuxPackages_6_13;
   boot.kernel.sysctl = {
     "net.ipv4.tcp_congestion_control" = "cubic";
@@ -29,11 +23,8 @@ in
   hardware.graphics = {
     enable = true;
     extraPackages = with pkgs; [
-      intel-microcode
-      i915-firmware
       intel-media-driver
       intel-compute-runtime
-      xf86-video-intel
     ];
 
   };
@@ -60,6 +51,7 @@ in
     firefox
     gcc
     git
+    gh
     gnumake
     go
     gopls
@@ -122,10 +114,19 @@ in
   services.avahi.enable = true;
   services.openssh.enable = true;
   services.keyd = {
-    enable = true,
-    settingsFile = "/etc/keyd/default.conf";
+    enable = true;
+    keyboards = {
+      defaults = {
+	ids = [ "*" ];
+	settings = {
+	  main = {
+	    capslock  = "hold(ctrl); tap(esc)";
+	    ctrl      = "hold(ctrl); tap(esc)";
+	  };
+	};
+      };
+    };
   };
-  environment.etc."keyd/default.conf".text = keydConf;
   programs.gnupg.agent = {
     enable = true;
   };

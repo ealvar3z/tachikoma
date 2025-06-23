@@ -1,4 +1,4 @@
-{
+
   config,
   pkgs,
   inputs,
@@ -134,8 +134,6 @@
           *.rb       diff=ruby
           *.rs       diff=rust
         '';
-      };
-      home.file = {
       ".tmux.conf".text = ''
         # Change prefix key from Ctrl+b to Ctrl+a
         set -g prefix C-b
@@ -216,8 +214,6 @@
         set -g status-interval 60
         set -g status-left '#[fg=black]#[default]'
       '';
-    };
-    home.file = {
       ".inputrc".text = ''
         # edit ~/.inputrc
 
@@ -286,6 +282,7 @@
           set termguicolors
           set clipboard=unnamedplus
           set syntax=off
+	  colorscheme vacme
         '';
 
         plugins = with pkgs.vimPlugins; [
@@ -403,7 +400,8 @@
                 pos = "5120 700";
                 transform = "normal";
               };
-          }
+            };
+	 }
           ."${config.networking.hostName}";
       };
     };
