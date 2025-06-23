@@ -19,8 +19,11 @@
   hardware.graphics = {
     enable = true;
     extraPackages = with pkgs; [
+      intel-microcode
+      i915-firmware
       intel-media-driver
       intel-compute-runtime
+      xf86-video-intel
     ];
 
   };
@@ -29,14 +32,8 @@
     extraGroups = [
       "wheel"
       "video"
+      "scard"
     ];
-  };
-
-  fileSystems = {
-    "/media" = {
-      device = "/dev/disk/by-uuid/9dd50c72-23a0-42dd-9648-b41e938ad98c";
-      options = [ "nofail" ];
-    };
   };
 
   nixpkgs.config.allowUnfree = true;
