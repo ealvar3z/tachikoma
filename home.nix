@@ -135,6 +135,88 @@
           *.rs       diff=rust
         '';
       };
+      home.file = {
+      ".tmux.conf".text = ''
+        # Change prefix key from Ctrl+b to Ctrl+a
+        set -g prefix C-b
+
+        # "Prefix" "r" reloads configuration file
+        bind r source-file ~/.tmux.conf \; display-message "Tmux configuration reloaded"
+
+        # Make it possible to scroll window context with the mouse
+        set -g mouse on
+
+        # select clipboard w/ mouse
+        set -g @yank_selection_mouse 'clipboard'
+
+        # Use 256 colors
+        set -g default-terminal "tmux-256color"
+        set-option -g default-shell "/usr/bin/bash"
+        set-option -sa terminal-features ',*256color:RGB'
+        set-option -sg escape-time 10
+        set-option -g focus-events on
+
+        # Enable vim navigation in copy mode
+        setw -g mode-keys vi
+        setw -g status-keys vi
+
+        # Increase scroll buffer
+        set -g history-limit 20000
+
+        # Update status-{left,right} more often (default: 15)
+        set -g status on
+        set -g status-interval 60
+        set -g status-right "#H %a %H:%M:%S batt:#($HOME/bin/batt)"
+
+        bind c new-window      -c "#{pane_current_path}"
+        bind v split-window -h -c "#{pane_current_path}"
+        bind s split-window -v -c "#{pane_current_path}"
+
+        bind h select-pane -L
+        bind j select-pane -D
+        bind k select-pane -U
+        bind l select-pane -R
+
+        # Smart pane switching with awareness of Vim splits.
+        set -g @plugin 'tmux-plugins/tmux-sensible'
+        is_vim="ps -o state= -o comm= -t '#{pane_tty}' \
+            | grep -iqE '^[^TXZ ]+ +(\\S+\\/)?g?(view|l?n?vim?x?|fzf)(diff)?$'"
+        bind-key -n 'C-h' if-shell "$is_vim" 'send-keys C-h'  'select-pane -L'
+        bind-key -n 'C-j' if-shell "$is_vim" 'send-keys C-j'  'select-pane -D'
+        bind-key -n 'C-k' if-shell "$is_vim" 'send-keys C-k'  'select-pane -U'
+        bind-key -n 'C-l' if-shell "$is_vim" 'send-keys C-l'  'select-pane -R'
+        bind-key -n 'C-\\' if-shell "$is_vim" 'send-keys C-\\' 'select-pane -l'
+
+        bind-key -T copy-mode-vi 'C-h' select-pane -L
+        bind-key -T copy-mode-vi 'C-j' select-pane -D
+        bind-key -T copy-mode-vi 'C-k' select-pane -U
+        bind-key -T copy-mode-vi 'C-l' select-pane -R
+        bind-key -T copy-mode-vi 'C-\' select-pane -l
+        bind w last-pane
+        bind n next-window
+
+        # Copy mode
+        bind Enter copy-mode # enter copy mode
+        bind b list-buffers  # list paster buffers
+        bind B choose-buffer # choose which buffer to paste from
+
+        # Use vi key bindings in copy mode
+        setw -g mode-keys vi
+        bind-key -T copy-mode-vi v send-keys -X begin-selection
+        bind-key -T copy-mode-vi y send-keys -X copy-pipe-and-cancel "sh -c 'tmux show-buffer | { wl-copy || xclip -selection clipboard; }'"
+
+        # Ensure paste with 'p'
+        bind p run "sh -c 'wl-paste || xclip -o -selection clipboard' | tmux load-buffer - ; tmux paste-buffer"
+
+        # URL handler
+        bind o run-shell "xdg-open '##[[:space:]]'"
+
+        # status bar
+        set -g status on
+        set -g status-interval 60
+        set -g status-left '#[fg=black]#[default]'
+      '';
+    };
 
       programs = {
         bash = {
